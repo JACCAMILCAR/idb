@@ -1,0 +1,14 @@
+<hello name="{{ name }}"></hello>
+<p>Start editing to see some magic happen :)</p>
+
+<div>
+  <input type="text" #name />
+  <input type="number" #power />
+  <button (click)="saveHero(name, power)">submit</button>
+</div>
+<ul *ngFor="let item of heroList">
+  <li>{{ item.name }} - {{ item.power }}</li>
+</ul>
+<div>
+  <button>Delete DataBase</button>
+</div>
