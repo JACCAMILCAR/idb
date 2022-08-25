@@ -11,9 +11,16 @@ interface MyDB {
     key: string;
     value: Hero;
   };
+
+  Heros: {
+    key: string;
+    value: Hero;
+  };
 }
 
 type MyDBKeys = keyof MyDB;
+const aux: MyDBKeys = 'Hero';
+console.log(aux);
 
 @Injectable({
   providedIn: 'root',
@@ -25,13 +32,13 @@ export class IdbService {
   dbConnection$: Observable<IDBPDatabase<MyDB>>;
 
   connectToIDB() {
-    console.log('connect');
     this.dbConnection$ = from(
       openDB<MyDB>(this.databaseName, this.version, {
         upgrade(db) {
           console.log('IndexedDB upgrade');
           db.createObjectStore('Status', { keyPath: 'AppName' });
           db.createObjectStore('Hero', { keyPath: 'id', autoIncrement: true });
+          db.createObjectStore('Heros', { keyPath: 'id', autoIncrement: true });
         },
       })
     );
@@ -53,7 +60,7 @@ export class IdbService {
       map((db) => {
         const tx = db.transaction(target, 'readwrite');
         tx.objectStore(target)
-          .add({ ...value, josue : 'josue' })
+          .add({ ...value })
           .then((v) => {
             console.log('add', v);
           })
@@ -104,6 +111,7 @@ export class IdbService {
   }
 
   getAllData(target: MyDBKeys): Observable<Hero[]> {
+    console.log(target);
     return this.dbConnection$.pipe(
       switchMap((db) => {
         const tx = db.transaction(target, 'readonly');

@@ -10,11 +10,12 @@ import { IdbService } from './services/item.service';
 export class AppComponent {
   name = 'Angular ' + VERSION.major;
   heroList: Hero[];
+  herosList: Hero[];
 
   constructor(public item$: IdbService) {
     this.item$.connectToIDB();
-    this.item$.getAllData('Hero').subscribe((list) => {
-      this.heroList = list;
+    this.getAllData();
+    this.item$.getAllData('Heros').subscribe((list) => {
       console.log(list);
     });
   }
@@ -24,7 +25,14 @@ export class AppComponent {
     // h.id = 1;
     h.name = name.value;
     h.power = Number(power.value);
-    this.item$.addItem('Hero', h).subscribe();
+    this.item$.addItem('Heros', h).subscribe();
+    this.getAllData();
+  }
+
+  getAllData(): void {
+    this.item$.getAllData('Hero').subscribe((list) => {
+      this.heroList = list;
+    });
   }
 
   deleteDB() {
